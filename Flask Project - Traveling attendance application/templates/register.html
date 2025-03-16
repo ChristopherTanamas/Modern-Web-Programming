@@ -1,0 +1,465 @@
+<!-- 
+Christopher Nathaniel Tanamas / 222200153
+Grace Calista Lim / 222102176
+Jemima Alithia Sigar / 222101393 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background-color: #444;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 10px;
+            position: fixed;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+        }
+        .navbar .profile {
+            position: relative;
+            display: flex; 
+            align-items: center; 
+            overflow: hidden; 
+            max-width: 150px; 
+        }
+        .navbar .profile img {
+            width: 35px; 
+            height: 35px; 
+            border-radius: 50%;
+            align-items: center;
+        }
+        .navbar .profile span {
+            margin-left: 10px;
+            overflow: hidden; 
+            max-width: 100px;
+        }
+        .header {
+            display: flex;
+            align-items: center; 
+            gap: 10px; 
+        }
+        .logo {
+            width: 50px; 
+            height: 50px;
+        }
+        .logo img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 50px;
+        }
+        .header h3 {
+            font-size: 24px; 
+            margin: 0; 
+            color: #ffffff;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            background-color: #444;
+            color: #fff;
+            height: 100vh;
+            width: 200px;
+            position: fixed;
+            padding: 20px;
+            transition: transform 0.3s ease;
+            margin-top: 45px;     
+        }
+        .sidebar.closed {
+            transform: translateX(-100%);
+        }
+        .sidebar h1 {
+            font-size: 16px;
+            margin: 0 0 20px;
+        }
+        .sidebar a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 15px; 
+            padding: 8px; 
+            border-radius: 4px; 
+            transition: background 0.3s ease; 
+        }
+        .sidebar a:hover {
+            text-decoration: underline;
+            background-color: #666; 
+        }
+        .active {
+            background-color: #666; 
+        }
+
+        /* CONTENT */
+        .content {
+            margin-left: 220px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            transition: margin-left 0.3s ease;
+            padding-top: 90px;
+            padding-bottom: 20px;
+        }
+        .content.shifted {
+            margin-left: 20px;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group input[readonly] {
+            background-color: #e9e9e9;
+        }
+        .form-group button {
+            background-color: #555;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #333;
+        }
+
+        /* Modal */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+            background-color: #a5a5a579;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 20px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .close {
+            color: #d13333;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+        }
+
+        .close:hover{
+            color: #a41c1c;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-content button {
+            background-color: #d13333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-content button:hover {
+            background-color: #a41c1c;
+        }
+
+        /* Animation for modal */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 800px) {
+            .sidebar {
+                width: 200px;
+                height: 100%;
+                margin-top: 70px;
+            }
+            .content {
+                margin-left: 0;
+                margin-right: 18px;
+            }
+            .menu-button {
+                background-color: #444;
+                color: #fff;
+                padding: 10px 20px;
+                border: none;
+                cursor: pointer;
+                position: fixed;
+                top: 15px;
+                left: 10px;
+                z-index: 1000;
+            }
+            .logo{
+                margin-left: 60px;
+            }
+            .header h3{
+                font-size: 20px;
+            }
+            .logo img{
+                margin-top: 5px;
+                align-items: center;
+                max-width: 80%;
+            }
+            .navbar .profile span {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-container {
+                padding: 10px;
+            }
+            form input{
+                padding: 6px;
+            }
+            form button {
+                padding: 8px;
+            }
+            .sidebar {
+                margin-top: 60px;
+                font-size: 12px;
+                width: 100px;
+            }
+            .sidebar h1 {
+                font-size: 14px;
+            }
+            .sidebar a {
+                margin-bottom: 15px;
+            }
+            .menu-button {
+                background-color: #444;
+                color: #fff;
+                padding: 0px 20px;
+                border: none;
+                cursor: pointer;
+                position: fixed;
+                top: 25px;
+                left: 10px;
+                z-index: 1000;
+            }
+            .logo{
+                margin-left: 55px;
+                font-size: 12px;
+                width: 50px; 
+                height: 50px;
+            }
+            .content{
+                margin-right: 18px;
+                padding-top: 50px;
+            }
+            .header{
+                gap:1px;
+            }
+            .header h3{
+                font-size: 15px;
+            }
+            .logo img{
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="header">
+            <div class="logo">
+                <img src="{{ url_for ('static', filename='images/logo.png') }}" alt="Company Logo">
+            </div>
+            <h3>Go-Jajan Craft</h3>
+        </div>
+        <div class="profile">
+            <img src="{{ url_for ('static', filename='images/admin.jpg') }}" alt="Profile Picture">
+            <span>Admin</span>
+        </div>
+    </div>
+
+    <button class="menu-button" onclick="toggleSidebar()">☰</button>
+
+    <div class="sidebar" id="sidebar">
+        <a href="/">Attendance Page</a>
+        <a class="active" href="/register">Register Page</a>
+        <a href="/pembayaran">Transaction Page</a>
+        <a href="/daftar_attendance">Attendance Report</a>
+        <a href="/daftar_pembayaran">Transaction Report</a>
+    </div>
+    
+    <div class="content" id="content">
+        <form action="/register" method='POST'>
+            <h2>Register Member Baru</h2>
+            <div class="form-group">
+                <label for="id-member">ID Member</label>
+                <input type="text" id="id-member" name="id-member" placeholder="Masukkan ID Member" required>
+            </div>
+            <div class="form-group">
+                <label for="nama-member">Nama Member</label>
+                <input type="text" id="nama-member" name="nama-member" placeholder="Masukkan Nama Member" required>
+            </div>
+            <div class="form-group">
+                <label for="no-telp">Nomor HP</label>
+                <input type="text" id="no-telp" name="no-telp" placeholder="Masukkan Nomor Telepon" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Masukkan Email Member" required>
+            </div>
+            <div class="form-group">
+                <label for="bank">Akun Bank</label>
+                <input type="text" id="bank" name="bank" placeholder="Masukkan Akun Bank" required>
+            </div>
+            <div class="form-group">
+                <label for="norek">Nomor Rekening</label>
+                <input type="text" id="norek" name="norek" placeholder="Masukkan Nomor Rekening" required>
+            </div>
+            <div class="form-group">
+                <label for="kendaraan">Kendaraan</label>
+                <select id="kendaraan" name="kendaraan" onchange="updatePrice()">
+                    <option value="" disabled selected>Pilih Kendaraan</option>
+                    <option value="Bus">Bus</option>
+                    <option value="Travel">Travel</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="harga">Harga</label>
+                <input type="text" id="harga" name="harga" readonly placeholder="RpXXX.XXX,XX">
+            </div>
+            <div class="form-group">
+                <button type="submit">Add Member</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-message"></h2>
+            <p>Tutup untuk melanjutkan proses berikutnya</p>
+            <button onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            sidebar.classList.toggle('closed');
+            content.classList.toggle('shifted');
+        }
+
+        function updatePrice() {
+            const kendaraan = document.getElementById('kendaraan').value;
+            const hargaField = document.getElementById('harga');
+
+            let harga;
+            switch (kendaraan) {
+                case 'Bus':
+                    harga = 'Rp100.000,00'; // Bis
+                    break;
+                case 'Travel':
+                    harga = 'Rp50.000,00'; // Travel
+                    break;
+                default:
+                    harga = '';
+            }
+
+            hargaField.value = harga;
+        }
+
+        function closeModal() {
+            document.getElementById("myModal").style.display = "none";
+        }
+
+        window.onload = function() {
+            const modal = document.getElementById('myModal');
+            const closeBtn = document.querySelector('.close');
+
+            // Mengambil pesan dari Flask dan memasukkan ke dalam JS sebagai array
+            const messages = [
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% for category, message in messages %}
+                        { category: "{{ category }}", message: "{{ message }}" },
+                    {% endfor %}
+                {% endwith %}
+            ];
+
+            // Mengecek apakah ada pesan dengan kategori 'error'
+            messages.forEach((msg) => {
+                if (msg.category === 'error') {
+                    document.getElementById('modal-message').innerText = msg.message;
+                    modal.style.display = 'block';  
+                }
+                else if (msg.category === 'success') {
+                    document.getElementById('modal-message').innerText = msg.message;
+                    modal.style.display = 'block';  
+                }
+            });
+        };
+        
+        // Buat ngembaliin sidebar kalau screen beda
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+
+            if (window.innerWidth > 800) {
+                sidebar.classList.remove('closed');
+                content.classList.remove('shifted');
+            }
+        });
+    </script>
+</body>
+</html>

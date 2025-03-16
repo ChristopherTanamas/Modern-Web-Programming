@@ -1,0 +1,337 @@
+<!-- 
+Christopher Nathaniel Tanamas / 222200153
+Grace Calista Lim / 222102176
+Jemima Alithia Sigar / 222101393 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background-color: #444;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 10px;
+            position: fixed;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+        }
+        .navbar .profile {
+            position: relative;
+            display: flex; 
+            align-items: center; 
+            overflow: hidden; 
+            max-width: 150px; 
+        }
+        .navbar .profile img {
+            width: 35px; 
+            height: 35px; 
+            border-radius: 50%;
+            align-items: center;
+        }
+        .navbar .profile span {
+            margin-left: 10px;
+            overflow: hidden; 
+            max-width: 100px;
+        }
+        .header {
+            display: flex;
+            align-items: center; 
+            gap: 10px; 
+        }
+        .logo {
+            width: 50px; 
+            height: 50px;
+        }
+        .logo img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 50px;
+        }
+        .header h3 {
+            font-size: 24px; 
+            margin: 0; 
+            color: #ffffff;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            background-color: #444;
+            color: #fff;
+            height: 100vh;
+            width: 200px;
+            position: fixed;
+            padding: 20px;
+            transition: transform 0.3s ease;
+            margin-top: 45px;     
+        }
+        .sidebar.closed {
+            transform: translateX(-100%);
+        }
+        .sidebar h1 {
+            font-size: 16px;
+            margin: 0 0 20px;
+        }
+        .sidebar a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 15px; 
+            padding: 8px; 
+            border-radius: 4px; 
+            transition: background 0.3s ease; 
+        }
+        .sidebar a:hover {
+            text-decoration: underline;
+            background-color: #666; 
+        }
+        .active {
+            background-color: #666; 
+        }
+
+        /* CONTENT */
+        .content {
+            margin-left: 220px;
+            display: flex;
+            justify-content: center;
+            transition: margin-left 0.3s ease;
+            padding-top: 90px;
+            padding-bottom: 30px;
+        }
+        .content.shifted {
+            margin-left: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 1000px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #d5d3d3;
+        }
+        th {
+            background-color: #444;
+            color: white;
+        }
+        td:first-child {
+            min-width: 10px;
+            max-width: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 850px) {
+            .sidebar {
+                width: 200px;
+                height: 100%;
+                margin-top: 70px;
+            }
+            .content {
+                margin-left: 0;
+                margin-right: 18px;
+                width: 90%;
+            }
+            .menu-button {
+                background-color: #444;
+                color: #fff;
+                padding: 10px 20px;
+                border: none;
+                cursor: pointer;
+                position: fixed;
+                top: 15px;
+                left: 10px;
+                z-index: 1000;
+            }
+            .logo{
+                margin-left: 60px;
+            }
+            .header h3{
+                font-size: 20px;
+            }
+            .logo img{
+                margin-top: 5px;
+                align-items: center;
+                max-width: 80%;
+            }
+            table {
+                font-size: 12px;
+            }
+
+            .navbar .profile span {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-container {
+                padding: 10px;
+            }
+            form input{
+                padding: 6px;
+            }
+            form button {
+                padding: 8px;
+            }
+            .sidebar {
+                margin-top: 60px;
+                font-size: 12px;
+                width: 100px;
+            }
+            .sidebar h1 {
+                font-size: 14px;
+            }
+            .sidebar a {
+                margin-bottom: 15px;
+            }
+            .menu-button {
+                background-color: #444;
+                color: #fff;
+                padding: 0px 20px;
+                border: none;
+                cursor: pointer;
+                position: fixed;
+                top: 25px;
+                left: 10px;
+                z-index: 1000;
+            }
+            .logo{
+                margin-left: 55px;
+                font-size: 12px;
+                width: 50px; 
+                height: 50px;
+            }
+            .content{
+                margin-right: 18px;
+                padding-top: 90px;
+            }
+            .header{
+                gap:1px;
+            }
+            .header h3{
+                font-size: 15px;
+            }
+            .logo img{
+                margin-top: 5px;
+            }
+            table {
+                font-size: 12px; 
+                width: 80%; 
+            }
+            th, td {
+                padding: 4px;
+            }
+            td:first-child {
+                min-width: 5px;
+                max-width: 5px;
+            }
+        }
+
+        @media (max-width: 1280px) {
+            .sidebar {
+                width: 150px;
+                overflow-y: auto;
+            }
+            .content {
+                margin-left: 150px;
+            }
+            .sidebar h1 {
+                font-size: 14px;
+            }
+            table {
+                font-size: 12px; 
+                width: 600px; 
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="header">
+            <div class="logo">
+                <img src="{{ url_for ('static', filename='images/logo.png') }}" alt="Company Logo">
+            </div>
+            <h3>Go-Jajan Craft</h3>
+        </div>
+        <div class="profile">
+            <img src="{{ url_for ('static', filename='images/admin.jpg') }}" alt="Profile Picture">
+            <span>Admin</span>
+        </div>
+    </div>
+
+    <button class="menu-button" onclick="toggleSidebar()">☰</button>
+
+    <div class="sidebar" id="sidebar">
+        <a href="/">Attendance Page</a>
+        <a href="/register">Register Page</a>
+        <a href="/pembayaran">Transaction Page</a>
+        <a href="/daftar_attendance">Attendance Report</a>
+        <a class="active" href="/daftar_pembayaran">Transaction Report</a>
+    </div>
+    
+    <div class="content" id="content">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ID Member</th>
+                    <th>Tanggal Pembayaran</th>
+                    <th>Waktu Pembayaran</th>
+                    <th>Total Pembayaran</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.id }}</td>
+                    <td>{{ transaction.id_member }}</td>
+                    <td>{{ transaction.tgl_pembayaran }}</td>
+                    <td>{{ transaction.waktu_pembayaran }}</td>
+                    <td>{{ transaction.total_pembayaran }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>    
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            sidebar.classList.toggle('closed');
+            content.classList.toggle('shifted');
+        }
+
+        // Buat ngembaliin sidebar kalau screen beda
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+
+            if (window.innerWidth > 800) {
+                sidebar.classList.remove('closed');
+                content.classList.remove('shifted');
+            }
+        });
+    </script>
+</body>
+</html>

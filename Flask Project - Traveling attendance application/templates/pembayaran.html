@@ -1,0 +1,489 @@
+<!-- 
+Christopher Nathaniel Tanamas / 222200153
+Grace Calista Lim / 222102176
+Jemima Alithia Sigar / 222101393 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background-color: #444;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 10px;
+            position: fixed;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+        }
+        .navbar .profile {
+            position: relative;
+            display: flex; 
+            align-items: center; 
+            overflow: hidden; 
+            max-width: 150px; 
+        }
+        .navbar .profile img {
+            width: 35px; 
+            height: 35px; 
+            border-radius: 50%;
+            align-items: center;
+        }
+        .navbar .profile span {
+            margin-left: 10px;
+            overflow: hidden; 
+            max-width: 100px;
+        }
+        .header {
+            display: flex;
+            align-items: center; 
+            gap: 10px; 
+        }
+        .logo {
+            width: 50px; 
+            height: 50px;
+        }
+        .logo img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 50px;
+        }
+        .header h3 {
+            font-size: 24px; 
+            margin: 0; 
+            color: #ffffff;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            background-color: #444;
+            color: #fff;
+            height: 100vh;
+            width: 200px;
+            position: fixed;
+            padding: 20px;
+            transition: transform 0.3s ease;
+            margin-top: 45px;     
+        }
+        .sidebar.closed {
+            transform: translateX(-100%);
+        }
+        .sidebar h1 {
+            font-size: 16px;
+            margin: 0 0 20px;
+        }
+        .sidebar a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 15px; 
+            padding: 8px; 
+            border-radius: 4px; 
+            transition: background 0.3s ease; 
+        }
+        .sidebar a:hover {
+            text-decoration: underline;
+            background-color: #666; 
+        }
+        .active {
+            background-color: #666; 
+        }
+
+        /* CONTENT */
+        .content {
+            margin-left: 220px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* RECEIPT */
+        .receipt-container {
+            width: 300px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            font-family: Arial, sans-serif;
+        }
+
+        .receipt-header {
+            text-align: center;
+            border-bottom: 2px dashed #444;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .receipt-header h2 {
+            color: #444;
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .receipt-logo {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 15px;
+        }
+
+        .receipt-logo img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .receipt-body {
+            margin-bottom: 20px;
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            color: #444;
+        }
+
+        .receipt-label {
+            font-weight: bold;
+            color: #666;
+        }
+
+        .receipt-value {
+            text-align: right;
+        }
+
+        .receipt-total {
+            border-top: 2px dashed #444;
+            margin-top: 20px;
+            padding-top: 15px;
+        }
+
+        .receipt-footer {
+            text-align: center;
+            color: #888;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+
+        .receipt-bank {
+            background: #f8f8f8;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .no-receipt {
+            width: 300px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            font-family: Arial, sans-serif;
+            font-size: large;
+        }
+
+        /* The Modal */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(196, 255, 204, 0.5); 
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 20px; 
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Close button */
+        .close {
+            color: #d13333;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #a41c1c;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Button inside modal */
+        .modal-content button {
+            background-color: #d13333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-content button:hover {
+            background-color: #a41c1c;
+        }
+
+        /* Animation for modal */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 800px) {
+            .sidebar {
+                width: 200px;
+                height: 100%;
+                margin-top: 70px;
+            }
+            .content {
+                margin-left: 0;
+            }
+            .menu-button {
+                background-color: #444;
+                color: #fff;
+                padding: 10px 20px;
+                border: none;
+                cursor: pointer;
+                position: fixed;
+                top: 15px;
+                left: 10px;
+                z-index: 1000;
+            }
+            .logo{
+                margin-left: 60px;
+            }
+            .header h3{
+                font-size: 20px;
+            }
+            .logo img{
+                margin-top: 5px;
+                align-items: center;
+                max-width: 80%;
+            }
+            .navbar .profile span {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-container {
+                padding: 10px;
+            }
+            form input, .form select {
+                padding: 6px;
+            }
+            form button {
+                padding: 8px;
+            }
+            .sidebar {
+                margin-top: 60px;
+                font-size: 12px;
+                width: 100px;
+            }
+            .sidebar h1 {
+                font-size: 14px;
+            }
+            .sidebar a {
+                margin-bottom: 15px;
+            }
+            .menu-button {
+                background-color: #444;
+                color: #fff;
+                padding: 0px 20px;
+                border: none;
+                cursor: pointer;
+                position: fixed;
+                top: 25px;
+                left: 10px;
+                z-index: 1000;
+            }
+            .logo{
+                margin-left: 55px;
+                font-size: 12px;
+                width: 50px; 
+                height: 50px;
+            }
+            .content{
+                margin-right: 10px;
+            }
+            .header{
+                gap:1px;
+            }
+            .header h3{
+                font-size: 15px;
+            }
+            .logo img{
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="header">
+            <div class="logo">
+                <img src="{{ url_for ('static', filename='images/logo.png') }}" alt="Company Logo">
+            </div>
+            <h3>Go-Jajan Craft</h3>
+        </div>
+        <div class="profile">
+            <img src="{{ url_for ('static', filename='images/admin.jpg') }}" alt="Profile Picture">
+            <span>Admin</span>
+        </div>
+    </div>
+
+    <button class="menu-button" onclick="toggleSidebar()">☰</button>
+
+    <div class="sidebar" id="sidebar">
+        <a href="/">Attendance Page</a>
+        <a href="/register">Register Page</a>
+        <a class="active" href="/pembayaran">Transaction Page</a>
+        <a href="/daftar_attendance">Attendance Report</a>
+        <a href="/daftar_pembayaran">Transaction Report</a>
+    </div>
+
+    <div class="content">
+        {% if show_receipt %}
+        <div class="receipt-container">
+            <div class="receipt-header">
+                <div class="receipt-logo">
+                    <img src="{{ url_for ('static', filename='images/logo.png') }}" alt="Company Logo">
+                </div>
+            </div>
+            <div class="receipt-body">
+              <div class="receipt-row">
+                <span class="receipt-label">Member ID:</span>
+                <span class="receipt-value">{{ id_member }}</span>
+              </div>
+              <div class="receipt-row">
+                <span class="receipt-label">Date:</span>
+                <span class="receipt-value">{{ tgl }}</span>
+              </div>
+              <div class="receipt-row receipt-total">
+                <span class="receipt-label">Total Fee:</span>
+                <span class="receipt-value">{{ total }}</span>
+              </div>
+            </div>
+            <div class="receipt-bank">
+              <div class="receipt-row">
+                <span class="receipt-label">Bank:</span>
+                <span class="receipt-value">{{ bank }}</span>
+              </div>
+              <div class="receipt-row">
+                <span class="receipt-label">Account No:</span>
+                <span class="receipt-value">{{ norek }}</span>
+              </div>
+            </div>
+        
+            <div class="receipt-footer">
+                Berikut bukti pembayaran Anda!<br><br>
+                <!-- The Modal -->
+                <div id="myModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <h2>Pembayaran Berhasil!</h2>
+                        <p>Tutup untuk melanjutkan proses lainnya</p>
+                        <button onclick="closeModal()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="no-receipt">
+            <h3>Belum Ada Transaksi yang Dapat Dilakukan</h3>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            sidebar.classList.toggle('closed');
+            content.classList.toggle('shifted');
+        }
+
+        // Function to open the modal
+        function openModal() {
+            document.getElementById("myModal").style.display = "flex";
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById("myModal").style.display = "none";
+        }
+
+        // Close the modal if the user clicks outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById("myModal");
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        window.onload = function() {
+        // Langsung menampilkan modal
+            {% if show_receipt %}
+                openModal();
+            {% endif %}
+    };
+
+        // Buat ngembaliin sidebar kalau screen beda
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+
+            if (window.innerWidth > 800) {
+                sidebar.classList.remove('closed');
+                content.classList.remove('shifted');
+            }
+        });
+    </script>
+</body>
+</html>
